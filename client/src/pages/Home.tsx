@@ -1,25 +1,38 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import Header from '@/components/Header';
+import Hero from '@/components/Hero';
+import About from '@/components/About';
+import Experience from '@/components/Experience';
+import Certifications from '@/components/Certifications';
+import Skills from '@/components/Skills';
+import Contact from '@/components/Contact';
+import Footer from '@/components/Footer';
 
 /**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
+ * Ahmed Mahmoud's Professional Portfolio
+ * 
+ * Design Philosophy: Professional Elegance with Operational Clarity
+ * - Clean, minimalist design that prioritizes content hierarchy
+ * - Deep Navy Blue (#1F3A5F) primary color for trust and professionalism
+ * - Soft Cream (#F9F7F4) background for warmth and sophistication
+ * - Accent Teal (#0D9488) for highlights and certifications
+ * - Typography: Playfair Display (headings), Lato (body), Montserrat (labels)
  */
-export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
 
+export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
+    <div className="min-h-screen flex flex-col bg-background">
+      <Header />
+      
+      <main className="flex-1">
+        <Hero />
+        <About />
+        <Experience />
+        <Certifications />
+        <Skills />
+        <Contact />
       </main>
+      
+      <Footer />
     </div>
   );
 }
