@@ -31,9 +31,9 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-bold mb-4">Contact</h4>
             <div className="space-y-2 text-sm text-white/80">
-              <p>Email: <a href="mailto:ahmed@example.com" className="text-white hover:underline">ahmed@example.com</a></p>
+              <p>LinkedIn: <a href="https://www.linkedin.com/in/ahmedmohamedahmedm" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">Ahmed Mohamed</a></p>
               <p>Location: Abu Dhabi, UAE</p>
-              <p>Phone: <a href="tel:+971" className="text-white hover:underline">+971 (0) XXX XXXX</a></p>
+              <p>Website: <a href="https://ahmedqualityops.com" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">ahmedqualityops.com</a></p>
             </div>
           </div>
         </div>

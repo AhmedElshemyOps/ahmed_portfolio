@@ -37,19 +37,23 @@ export default function Hero() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button 
-                className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
-                size="lg"
-              >
-                View My Work <ArrowRight size={18} />
-              </Button>
-              <Button 
-                variant="outline" 
-                className="border-primary text-primary hover:bg-primary/5 flex items-center gap-2"
-                size="lg"
-              >
-                <Download size={18} /> Download CV
-              </Button>
+              <a href="#experience" className="inline-block">
+                <Button 
+                  className="bg-primary hover:bg-primary/90 text-white flex items-center gap-2"
+                  size="lg"
+                >
+                  View My Work <ArrowRight size={18} />
+                </Button>
+              </a>
+              <a href="/Ahmed-Mahmoud-CV.pdf" download className="inline-block">
+                <Button 
+                  variant="outline" 
+                  className="border-primary text-primary hover:bg-primary/5 flex items-center gap-2"
+                  size="lg"
+                >
+                  <Download size={18} /> Download CV
+                </Button>
+              </a>
             </div>
 
             {/* Key Stats */}
@@ -69,13 +73,14 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Column - Professional Image Placeholder */}
+          {/* Right Column - Professional Image */}
           <div className="hidden md:flex justify-center items-center">
-            <div className="w-80 h-96 bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg border-2 border-primary/20 flex items-center justify-center">
-              <div className="text-center">
-                <p className="text-foreground text-sm">Professional Photo</p>
-                <p className="text-muted-foreground text-xs mt-2">(Upload your professional image here)</p>
-              </div>
+            <div className="w-80 h-96 rounded-lg border-2 border-primary/20 overflow-hidden shadow-lg">
+              <img 
+                src="/ahmed-professional-photo.jpg" 
+                alt="Ahmed Mahmoud - Professional Photo"
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>

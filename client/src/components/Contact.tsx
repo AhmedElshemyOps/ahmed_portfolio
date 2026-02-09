@@ -43,14 +43,14 @@ export default function Contact() {
     {
       icon: Mail,
       title: 'Email',
-      value: 'ahmed@example.com',
-      href: 'mailto:ahmed@example.com'
+      value: 'Contact via LinkedIn',
+      href: 'https://www.linkedin.com/in/ahmedmohamedahmedm'
     },
     {
-      icon: Phone,
-      title: 'Phone',
-      value: '+971 (0) XXX XXXX',
-      href: 'tel:+971'
+      icon: Linkedin,
+      title: 'LinkedIn',
+      value: 'Ahmed Mohamed',
+      href: 'https://www.linkedin.com/in/ahmedmohamedahmedm'
     },
     {
       icon: MapPin,
