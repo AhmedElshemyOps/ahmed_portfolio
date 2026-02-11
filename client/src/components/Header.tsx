@@ -5,12 +5,13 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
-    { label: 'Experience', href: '#experience' },
-    { label: 'Certifications', href: '#certifications' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/#about' },
+    { label: 'Experience', href: '/#experience' },
+    { label: 'Certifications', href: '/#certifications' },
+    { label: 'Skills', href: '/#skills' },
+    { label: 'Files', href: '/documents' },
+    { label: 'Contact', href: '/#contact' },
   ];
 
   return (
