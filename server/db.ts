@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, portfolioFiles, InsertPortfolioFile, PortfolioFile } from "../drizzle/schema";
+import { InsertUser, users, portfolioFiles, InsertPortfolioFile, PortfolioFile, contactMessages, InsertContactMessage, ContactMessage } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -167,6 +167,72 @@ export async function updatePortfolioFile(fileId: number, updates: Partial<Inser
     return getPortfolioFileById(fileId);
   } catch (error) {
     console.error("[Database] Failed to update portfolio file:", error);
+    throw error;
+  }
+}
+
+// Contact Messages Management
+export async function createContactMessage(message: InsertContactMessage): Promise<ContactMessage | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create message: database not available");
+    return null;
+  }
+
+  try {
+    const result = await db.insert(contactMessages).values(message);
+    const insertedId = result[0].insertId;
+    const created = await db.select().from(contactMessages).where(eq(contactMessages.id, Number(insertedId))).limit(1);
+    return created.length > 0 ? created[0] : null;
+  } catch (error) {
+    console.error("[Database] Failed to create contact message:", error);
+    throw error;
+  }
+}
+
+export async function getContactMessages(limit: number = 50, offset: number = 0): Promise<ContactMessage[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get messages: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(contactMessages).orderBy(contactMessages.createdAt).limit(limit).offset(offset);
+  } catch (error) {
+    console.error("[Database] Failed to get contact messages:", error);
+    return [];
+  }
+}
+
+export async function markMessageAsRead(messageId: number): Promise<ContactMessage | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update message: database not available");
+    return null;
+  }
+
+  try {
+    await db.update(contactMessages).set({ isRead: 1 }).where(eq(contactMessages.id, messageId));
+    const result = await db.select().from(contactMessages).where(eq(contactMessages.id, messageId)).limit(1);
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error("[Database] Failed to mark message as read:", error);
+    throw error;
+  }
+}
+
+export async function markEmailSent(messageId: number): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot update message: database not available");
+    return;
+  }
+
+  try {
+    await db.update(contactMessages).set({ emailSent: 1 }).where(eq(contactMessages.id, messageId));
+  } catch (error) {
+    console.error("[Database] Failed to mark email as sent:", error);
     throw error;
   }
 }

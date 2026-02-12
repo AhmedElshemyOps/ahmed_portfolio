@@ -3,9 +3,11 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { createPortfolioFile, getUserPortfolioFiles, getPortfolioFileById, deletePortfolioFile, updatePortfolioFile } from "./db";
+import { createPortfolioFile, getUserPortfolioFiles, getPortfolioFileById, deletePortfolioFile, updatePortfolioFile, createContactMessage, markEmailSent } from "./db";
 import { storagePut } from "./storage";
+import { sendContactNotification, sendContactConfirmation } from "./email";
 import { nanoid } from "nanoid";
+import { ENV } from "./_core/env";
 
 export const appRouter = router({
   system: systemRouter,
@@ -110,6 +112,61 @@ export const appRouter = router({
           category: input.category,
           isPublic: input.isPublic ? 1 : 0,
         });
+      }),
+  }),
+
+  contact: router({
+    submit: publicProcedure
+      .input(z.object({
+        visitorName: z.string().min(1, "Name is required"),
+        visitorEmail: z.string().email("Valid email is required"),
+        visitorPhone: z.string().optional(),
+        subject: z.string().min(1, "Subject is required"),
+        message: z.string().min(10, "Message must be at least 10 characters"),
+      }))
+      .mutation(async ({ input }) => {
+        try {
+          const message = await createContactMessage({
+            visitorName: input.visitorName,
+            visitorEmail: input.visitorEmail,
+            visitorPhone: input.visitorPhone || null,
+            subject: input.subject,
+            message: input.message,
+            isRead: 0,
+            emailSent: 0,
+          });
+
+          if (!message) {
+            throw new Error('Failed to save message');
+          }
+
+          const ownerEmail = ENV.ownerEmail || 'owner@example.com';
+          const ownerName = ENV.ownerName || 'Portfolio Owner';
+
+          const emailSent = await sendContactNotification(
+            ownerEmail,
+            input.visitorName,
+            input.visitorEmail,
+            input.visitorPhone || null,
+            input.subject,
+            input.message
+          );
+
+          if (emailSent) {
+            await markEmailSent(message.id);
+          }
+
+          await sendContactConfirmation(input.visitorEmail, input.visitorName, ownerName);
+
+          return {
+            success: true,
+            messageId: message.id,
+            message: 'Thank you for your message! We will get back to you soon.',
+          };
+        } catch (error) {
+          console.error('[Contact] Submission error:', error);
+          throw error;
+        }
       }),
   }),
 });

@@ -48,3 +48,23 @@ export const portfolioFiles = mysqlTable("portfolio_files", {
 
 export type PortfolioFile = typeof portfolioFiles.$inferSelect;
 export type InsertPortfolioFile = typeof portfolioFiles.$inferInsert;
+
+/**
+ * Contact Messages Table
+ * Stores messages submitted through the contact form
+ * Used to track inquiries and send email notifications
+ */
+export const contactMessages = mysqlTable("contact_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  visitorName: varchar("visitorName", { length: 255 }).notNull(),
+  visitorEmail: varchar("visitorEmail", { length: 320 }).notNull(),
+  visitorPhone: varchar("visitorPhone", { length: 20 }),
+  subject: varchar("subject", { length: 255 }).notNull(),
+  message: text("message").notNull(),
+  isRead: int("isRead").default(0).notNull(),
+  emailSent: int("emailSent").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type ContactMessage = typeof contactMessages.$inferSelect;
+export type InsertContactMessage = typeof contactMessages.$inferInsert;
