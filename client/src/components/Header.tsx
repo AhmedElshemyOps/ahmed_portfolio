@@ -10,6 +10,7 @@ export default function Header() {
     { label: 'Experience', href: '/#experience' },
     { label: 'Certifications', href: '/#certifications' },
     { label: 'Skills', href: '/#skills' },
+    { label: 'Blog', href: '/blog' },
     { label: 'Files', href: '/documents' },
     { label: 'Contact', href: '/#contact' },
   ];

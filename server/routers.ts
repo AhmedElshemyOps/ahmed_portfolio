@@ -3,7 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router, protectedProcedure } from "./_core/trpc";
 import { z } from "zod";
-import { createPortfolioFile, getUserPortfolioFiles, getPortfolioFileById, deletePortfolioFile, updatePortfolioFile, createContactMessage, markEmailSent } from "./db";
+import { createPortfolioFile, getUserPortfolioFiles, getPortfolioFileById, deletePortfolioFile, updatePortfolioFile, createContactMessage, markEmailSent, getBlogPosts, getBlogPostBySlug, getBlogPostsByCategory } from "./db";
 import { storagePut } from "./storage";
 import { sendContactNotification, sendContactConfirmation } from "./email";
 import { nanoid } from "nanoid";
@@ -112,6 +112,55 @@ export const appRouter = router({
           category: input.category,
           isPublic: input.isPublic ? 1 : 0,
         });
+      }),
+  }),
+
+  blog: router({
+    list: publicProcedure
+      .input(z.object({
+        limit: z.number().max(50).default(10),
+        offset: z.number().default(0),
+      }))
+      .query(async ({ input }) => {
+        try {
+          const posts = await getBlogPosts(input.limit, input.offset);
+          return {
+            posts: posts || [],
+            total: posts?.length || 0,
+          };
+        } catch (error) {
+          console.error('[Blog] List error:', error);
+          return { posts: [], total: 0 };
+        }
+      }),
+
+    getBySlug: publicProcedure
+      .input(z.object({
+        slug: z.string().min(1),
+      }))
+      .query(async ({ input }) => {
+        try {
+          const post = await getBlogPostBySlug(input.slug);
+          return post || null;
+        } catch (error) {
+          console.error('[Blog] Get by slug error:', error);
+          return null;
+        }
+      }),
+
+    getByCategory: publicProcedure
+      .input(z.object({
+        category: z.string().min(1),
+        limit: z.number().max(50).default(10),
+      }))
+      .query(async ({ input }) => {
+        try {
+          const posts = await getBlogPostsByCategory(input.category, input.limit);
+          return posts || [];
+        } catch (error) {
+          console.error('[Blog] Get by category error:', error);
+          return [];
+        }
       }),
   }),
 

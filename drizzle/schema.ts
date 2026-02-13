@@ -68,3 +68,26 @@ export const contactMessages = mysqlTable("contact_messages", {
 
 export type ContactMessage = typeof contactMessages.$inferSelect;
 export type InsertContactMessage = typeof contactMessages.$inferInsert;
+
+/**
+ * Blog Posts Table
+ * Stores published blog articles to establish thought leadership
+ */
+export const blogPosts = mysqlTable("blog_posts", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull().unique(),
+  excerpt: text("excerpt"),
+  content: text("content").notNull(),
+  category: varchar("category", { length: 100 }),
+  tags: varchar("tags", { length: 500 }),
+  author: varchar("author", { length: 255 }).default("Ahmed Mahmoud"),
+  featuredImage: text("featuredImage"),
+  readingTime: int("readingTime"),
+  isPublished: int("isPublished").default(1).notNull(),
+  publishedAt: timestamp("publishedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type InsertBlogPost = typeof blogPosts.$inferInsert;

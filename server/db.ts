@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, portfolioFiles, InsertPortfolioFile, PortfolioFile, contactMessages, InsertContactMessage, ContactMessage } from "../drizzle/schema";
+import { InsertUser, users, portfolioFiles, InsertPortfolioFile, PortfolioFile, contactMessages, InsertContactMessage, ContactMessage, blogPosts, InsertBlogPost, BlogPost } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -234,5 +234,71 @@ export async function markEmailSent(messageId: number): Promise<void> {
   } catch (error) {
     console.error("[Database] Failed to mark email as sent:", error);
     throw error;
+  }
+}
+
+
+// Blog Posts Management
+export async function createBlogPost(post: InsertBlogPost): Promise<BlogPost | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot create blog post: database not available");
+    return null;
+  }
+
+  try {
+    const result = await db.insert(blogPosts).values(post);
+    const insertedId = result[0].insertId;
+    const created = await db.select().from(blogPosts).where(eq(blogPosts.id, Number(insertedId))).limit(1);
+    return created.length > 0 ? created[0] : null;
+  } catch (error) {
+    console.error("[Database] Failed to create blog post:", error);
+    throw error;
+  }
+}
+
+export async function getBlogPosts(limit: number = 10, offset: number = 0): Promise<BlogPost[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get blog posts: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(blogPosts).where(eq(blogPosts.isPublished, 1)).orderBy(desc(blogPosts.publishedAt)).limit(limit).offset(offset);
+  } catch (error) {
+    console.error("[Database] Failed to get blog posts:", error);
+    return [];
+  }
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get blog post: database not available");
+    return null;
+  }
+
+  try {
+    const result = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug)).limit(1);
+    return result.length > 0 ? result[0] : null;
+  } catch (error) {
+    console.error("[Database] Failed to get blog post:", error);
+    return null;
+  }
+}
+
+export async function getBlogPostsByCategory(category: string, limit: number = 10): Promise<BlogPost[]> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get blog posts: database not available");
+    return [];
+  }
+
+  try {
+    return await db.select().from(blogPosts).where(eq(blogPosts.category, category)).orderBy(blogPosts.publishedAt).limit(limit);
+  } catch (error) {
+    console.error("[Database] Failed to get blog posts by category:", error);
+    return [];
   }
 }

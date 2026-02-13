@@ -76,3 +76,15 @@
 - [x] Update Contact component to use API
 - [x] Test email notifications (13/13 tests passing)
 - [x] Create email notification documentation
+
+
+## Blog Section Feature
+- [x] Create blog database schema (posts table)
+- [x] Add blog API procedures (list, get, create)
+- [x] Write article 1: Sustainability and Green Operations
+- [x] Write article 2: Digital Transformation in Hospitality
+- [x] Build Blog listing page component
+- [x] Build individual blog article page
+- [x] Add blog navigation to header
+- [x] Test blog API and pages (19/19 tests passing)
+- [x] Seed blog posts into database
