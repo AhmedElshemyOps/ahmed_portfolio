@@ -49,61 +49,61 @@ export default function Blog() {
         ) : (
           <div className="space-y-6">
             {posts.map((post) => (
-              <Card key={post.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <div className="flex-1">
-                      <Link href={`/blog/${post.slug}`}>
-                        <a className="hover:text-primary transition-colors">
-                          <CardTitle className="text-2xl mb-2">{post.title}</CardTitle>
-                        </a>
-                      </Link>
-                      <CardDescription className="text-base">{post.excerpt}</CardDescription>
-                    </div>
-                    {post.featuredImage && (
-                      <img
-                        src={post.featuredImage}
-                        alt={post.title}
-                        className="w-32 h-32 object-cover rounded-lg flex-shrink-0"
-                      />
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap items-center gap-4 mb-4">
-                    {post.category && (
-                      <Badge variant="secondary">{post.category}</Badge>
-                    )}
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Calendar className="w-4 h-4" />
-                      {format(new Date(post.publishedAt), "MMM dd, yyyy")}
-                    </div>
-                    {post.readingTime && (
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="w-4 h-4" />
-                        {post.readingTime} min read
+              <Link key={post.id} href={`/blog/${post.slug}`}>
+                <a className="block hover:no-underline">
+                  <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                    <CardHeader>
+                      <div className="flex items-start justify-between gap-4 mb-2">
+                        <div className="flex-1">
+                          <CardTitle className="text-2xl mb-2 hover:text-primary transition-colors">
+                            {post.title}
+                          </CardTitle>
+                          <CardDescription className="text-base">{post.excerpt}</CardDescription>
+                        </div>
+                        {post.featuredImage && (
+                          <img
+                            src={post.featuredImage}
+                            alt={post.title}
+                            className="w-32 h-32 object-cover rounded-lg flex-shrink-0"
+                          />
+                        )}
                       </div>
-                    )}
-                  </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap items-center gap-4 mb-4">
+                        {post.category && (
+                          <Badge variant="secondary">{post.category}</Badge>
+                        )}
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Calendar className="w-4 h-4" />
+                          {format(new Date(post.publishedAt), "MMM dd, yyyy")}
+                        </div>
+                        {post.readingTime && (
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Clock className="w-4 h-4" />
+                            {post.readingTime} min read
+                          </div>
+                        )}
+                      </div>
 
-                  {post.tags && (
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {post.tags.split(",").map((tag) => (
-                        <Badge key={tag.trim()} variant="outline" className="text-xs">
-                          {tag.trim()}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
+                      {post.tags && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {post.tags.split(",").map((tag) => (
+                            <Badge key={tag.trim()} variant="outline" className="text-xs">
+                              {tag.trim()}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
 
-                  <Link href={`/blog/${post.slug}`}>
-                    <a className="inline-flex items-center gap-2 text-primary hover:gap-3 transition-all">
-                      Read Article
-                      <ArrowRight className="w-4 h-4" />
-                    </a>
-                  </Link>
-                </CardContent>
-              </Card>
+                      <div className="inline-flex items-center gap-2 text-primary transition-all">
+                        Read Article
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </a>
+              </Link>
             ))}
           </div>
         )}
